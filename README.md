@@ -1,6 +1,6 @@
 # The recipe for a successful movie
 ### Abstract
-The goal of this project is to explore the factors that contribute to a film's success. First, we will argue what success really means in the context of the film industry, considering multiple dimensions such as the box office revenue, the critical acclaim and the ROI. We will then examine a range of factors that may influence these success metrics, including genres, casts' composition, production companies and country of origin. We aim to go beyond simple correlation and, whenever possible, establish causal relationships between these factors and movie success. This approach will help us identify elements that truly impact a film’s performance rather than coincidental associations. Additionally, we will examine how the relationship between these factors and film success has evolved over time. For instance, we will analyse the emergence and popularity of new genres, the expansion of certain international movie markets, and the prevalence of particular themes.
+The goal of this project is to explore the factors that contribute to a film's success. First, we will argue what success really means in the context of the film industry, considering multiple dimensions such as the box office revenue, the critical acclaim, and the ROI. We will then examine a range of factors that may influence these success metrics, including genres, casts' composition, production companies and country of origin. We aim to go beyond simple correlation and, whenever possible, establish causal relationships between these factors and movie success. This approach will help us identify elements that truly impact a film’s performance rather than coincidental associations. Additionally, we will examine how the relationship between these factors and film success has evolved over time. For instance, we will analyse the emergence and popularity of new genres, the expansion of certain international movie markets, and the prevalence of particular themes.
 <br><br>
 
 ### Research questions
@@ -10,7 +10,7 @@ The goal of this project is to explore the factors that contribute to a film's s
 - How do we measure success? Is box-office the only metric? Are different metrics correlated?
 - How the cast impact the success of a movie? Does the age the actors and directors impact the success of a movie? Does the gender of the cast and directors influence a movie's success? Is the diversity of a cast impactful?
 - Does the genre of a movie impact its performance? Is the most successful genre always the same? Or does it change over time?
-- Are there countries that produce more successful movies? Does it matter if we normalise over the number of films produced by each nation? How did this change overtime?
+- Are there countries that produce more successful movies? Does it matter if we normalise over the number of films produced by each nation? How did this change over time?
 - How much does the movie budget impact its overall performance? How important is the production company?
 <br><br>
 
