@@ -259,37 +259,6 @@ def agg_bool(group):
             agg_dict[col] = group[col].iloc[0]
     return pd.Series(agg_dict)
 
-def map_country_list(l):
-    """
-    This function utilizes countries_mapper_dict to map the
-    names of the countries in the dataset to the correct names.
-    """
-    if pd.isna(l):
-        return pd.NA
-    l_split = l.split(",")
-    for i, el in enumerate(l_split):
-        l_split[i] = countries_mapper_dict[el]
-    l_split = [el for el in l_split if not pd.isna(el)]
-    if len(l_split) == 0:
-        return pd.NA
-    return ",".join(l_split)
-
-def map_genres_list(l):
-    """
-    This function utilizes genres_mapper_dict to map the
-    names of the genres in the dataset to the correct names.
-    """
-    if pd.isna(l):
-        return pd.NA
-    l = l.lower()
-    l_split = l.split(",")
-    for i, el in enumerate(l_split):
-        l_split[i] = genres_mapper_dict[el]
-    l_split = [el for el in l_split if not pd.isna(el)]
-    if len(l_split) == 0:
-        return pd.NA
-    return ",".join(l_split)
-
 def merge_comma_sep(str1, str2):
     """
     This function merges two sequences of comma separated
