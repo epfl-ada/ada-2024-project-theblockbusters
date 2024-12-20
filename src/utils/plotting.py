@@ -3,8 +3,7 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr
-from IPython.display import display, HTML, SVG
-import plotly.io as pio
+from IPython.display import display, HTML, SVG, Image
 
 def plot_scatter_matrix(df, columns, by='exclude', figsize=(6,6)):
     """
@@ -172,11 +171,9 @@ def save_and_display_plot(fig, filename, PLOTS_FOLDER, display_html=False):
     print(f"SVG file saved as {svg_filename}")
 
     if display_html:
-        html_content = fig.to_html(full_html=False)
-        display(HTML(html_content))
+        display(HTML(filename=html_filename))
     else:
-        svg_content = pio.to_image(fig, format='svg').decode('utf-8')
-        display(SVG(svg_content))
+        display(Image(fig.to_image(format='png')))
 
 def plot_gg(dataset, to_keep, file_name, height=2):
     """
