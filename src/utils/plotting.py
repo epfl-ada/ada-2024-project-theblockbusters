@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 import pandas as pd
+from scipy.stats import pearsonr
+from IPython.display import display, HTML, SVG
 
 def plot_scatter_matrix(df, columns, by='exclude', figsize=(6,6)):
     """
@@ -105,7 +107,7 @@ def plot_histograms(df, columns, nrows, ncols, figsize=(6,6), scale='normal'):
         ax.set_xlim([df[col].min(), df[col].max()])
         ax.set_ylim([0, 1.5*max_density])
         ax.set_title(title)
-        sns.histplot(data=df, x=col, color='lightskyblue', stat='density')
+        sns.histplot(data=df, x=col, color='lightskyblue', stat='density', bins=70)
         plt.grid(visible=True)
         if scale == 'log':
             plt.yscale('log')
@@ -153,4 +155,60 @@ def plot_histograms_by_category(df, column, nrows, ncols, feature, figsize=(6,6)
     plt.subplots_adjust(wspace=0.7, hspace=0.9)
     plt.ylabel('Densities')
     plt.show()
+
+def save_and_display_plot(fig, filename, PLOTS_FOLDER, display_html=False):
+    html_filename = PLOTS_FOLDER + f"{filename}.html"
+    pdf_filename = PLOTS_FOLDER + f"{filename}.pdf"
+    svg_filename = PLOTS_FOLDER + f"{filename}.svg"
+    
+    fig.write_html(file=html_filename, full_html=False, config={'displayModeBar': False, 'responsive': True})
+    print(f"HTML file saved as {html_filename}")
+
+    fig.write_image(pdf_filename, format='pdf')
+    print(f"PDF file saved as {pdf_filename}")
+
+    fig.write_image(svg_filename, format='svg')
+    print(f"SVG file saved as {svg_filename}")
+
+    if display_html:
+        display(HTML(filename=html_filename))
+    else:
+        display(SVG(filename=svg_filename))
+
+def plot_gg(dataset, to_keep, file_name, height=2):
+    """
+    Plot R's "ggpair"-like scatter matrix.
+
+    Args:
+        dataset: Pandas DataFrame
+        to_keep: list of valid columns in dataset
+        height: height of single scatterplots 
+        (default 2)
+    """
+
+    if not set(to_keep).issubset(dataset.columns):
+        raise Exception("to_keep should contain only valid column names.")
+
+    data = dataset[to_keep].dropna()
+    numeric_columns = to_keep
+
+    # Compute correlations
+    def corrfunc(x, y, **kwargs):
+        r, p = pearsonr(x, y)
+        ax = plt.gca()
+        ax.annotate(f'Corr. = {r:.3f}\nP-val = {p:.3f}', xy=(0.5, 0.5), xycoords=ax.transAxes,
+                    ha='center', va='center', fontsize=15, color='red')
+
+    g = sns.PairGrid(data, vars=numeric_columns, diag_sharey=False, height=height)
+    g.map_lower(sns.scatterplot, color='orange')
+    g.map_diag(sns.kdeplot, fill=True, color='blue')
+    g.map_upper(corrfunc)
+    g.add_legend()
+
+    plt.savefig(file_name+".svg", format='svg')
+    plt.savefig(file_name+".png", format='png')
+    
+    plt.show()
+    
+
 

@@ -193,3 +193,116 @@ def extract_primary_company(df, column, columns, n=0, add_count=True):
     new_df = new_df.sort_values(by='count', ascending=False)
 
     return new_df
+
+def compute_roi(df, revenue_col, budget_col):
+    """
+    Compute ROI (Return On Investments).
+
+    Args:
+        df: pandas DataFrame
+        revenue_col: valid column name for revenues
+        budget_col: valid column name for budget
+
+    Returns:
+        new_df: modified DataFrame with ROI(%) column
+    """
+
+    if revenue_col not in df.columns or budget_col not in df.columns:
+        raise Exception("Please enter valid column names")
+    if 'roi_perctg' in df.columns:
+        return df
+    
+    new_df = df
+    new_df['roi_perctg'] = df.apply(lambda row: row[revenue_col]/row[budget_col]*100 if not np.isnan(row[revenue_col])
+                                        and not np.isnan(row[budget_col])
+                                        and row[budget_col]!=0 
+                                        else np.nan, axis=1)
+    return new_df
+
+def create_quantile_col(dataset, col_name, quantiles):
+    """
+    Add a coulmn to dataset representing discrimination based 
+    on passed quantiles.
+
+    Args:
+        dataset: Pandas DataFrame
+        col_name: valid column name to discriminate on
+        quantiles: list of quantiles to discriminat on
+
+    Returns:
+        dataset: updated DataFrama
+    """
+    
+    if col_name not in dataset.columns:
+        raise Exception("Please enter a valid column name")
+    if 'quantile' in dataset.columns:
+        print("Quantile column already present")
+    qs = dataset[col_name].quantile(q=quantiles)
+    qs = np.insert(qs, 0, np.min(dataset[col_name]))
+    qs = np.append(qs, np.max(dataset[col_name]))
+    dataset['quantile'] = np.zeros((len(dataset,)))
+    dataset['quantile'] = (dataset[col_name]==qs[0])*1 + dataset['quantile']
+    for idx in range(0,len(qs)-1):
+        dataset['quantile'] = (dataset[col_name]>qs[idx])*(dataset[col_name]<=qs[idx+1])*(idx+1) + dataset['quantile']
+    return dataset
+   
+def agg_bool(group):
+    """
+    Aggregate a group taking an or if the type is
+    bool and taking the first element otherwise
+    """
+    agg_dict = {}
+    for col in group.columns:
+        if group[col].dtype == 'bool':
+            agg_dict[col] = group[col].any()
+        else:
+            agg_dict[col] = group[col].iloc[0]
+    return pd.Series(agg_dict)
+
+def map_country_list(l):
+    """
+    This function utilizes countries_mapper_dict to map the
+    names of the countries in the dataset to the correct names.
+    """
+    if pd.isna(l):
+        return pd.NA
+    l_split = l.split(",")
+    for i, el in enumerate(l_split):
+        l_split[i] = countries_mapper_dict[el]
+    l_split = [el for el in l_split if not pd.isna(el)]
+    if len(l_split) == 0:
+        return pd.NA
+    return ",".join(l_split)
+
+def map_genres_list(l):
+    """
+    This function utilizes genres_mapper_dict to map the
+    names of the genres in the dataset to the correct names.
+    """
+    if pd.isna(l):
+        return pd.NA
+    l = l.lower()
+    l_split = l.split(",")
+    for i, el in enumerate(l_split):
+        l_split[i] = genres_mapper_dict[el]
+    l_split = [el for el in l_split if not pd.isna(el)]
+    if len(l_split) == 0:
+        return pd.NA
+    return ",".join(l_split)
+
+def merge_comma_sep(str1, str2):
+    """
+    This function merges two sequences of comma separated
+    lists, removing duplicates.
+    """
+    if pd.isna(str1) and pd.isna(str2):
+        return pd.NA
+    elif pd.isna(str1):
+        return str2
+    elif pd.isna(str2):
+        return str1
+    else:
+        set1 = set(str1.split(","))
+        set2 = set(str2.split(","))
+        merged_set = set1.union(set2)
+        return ",".join(merged_set)
