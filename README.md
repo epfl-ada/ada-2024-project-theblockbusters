@@ -60,7 +60,11 @@ We have combined these datasets into a unified dataset. The complete integration
 ### Roles within the team
 
 **Stefano**: Data integration and cleaning, analysis on genres and countries, datastory
+
 **Luca**: Analysis on production companies, datastory
+
 **Hugo**: Decision tree model, overall OLS model, in depth overall check
+
 **Mouhamad**: Exploratory data analysis, analysis on cast and genres, in depth overall check
+
 **Francesco**: Exploratory data analysis, analysis of success metrics, results merging
